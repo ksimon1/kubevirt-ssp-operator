@@ -18,7 +18,7 @@ spec:
       serviceAccount: kubevirt-node-labeller
       containers:
       - name: kubevirt-node-labeller-sleeper
-        image: {{ ssp_registry | default('quay.io/ksimon') }}/{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
+        image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
         command: ["sleep"]
         args: ["infinity"]
       initContainers:
@@ -35,7 +35,7 @@ spec:
         - name: kubevirt-cpu-nfd-plugin
           image: {{ ssp_registry | default('quay.io/ksimon') }}/{{ kubevirt_cpu_nfd_plugin_image }}:{{ kubevirt_cpu_nfd_plugin_tag }}
           command: ["/bin/sh","-c"]
-          args: ["cp /plugin/dest/kubevirt-cpu-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/; cp /config/cpu-plugin-configmap.yaml /etc/kubernetes/node-feature-discovery/source.d/cpu-plugin-configmap.yaml;"]
+          args: ["cp /plugin/dest/cpu-nfd-plugin /etc/kubernetes/node-feature-discovery/source.d/; cp /config/cpu-plugin-configmap.yaml /etc/kubernetes/node-feature-discovery/source.d/cpu-plugin-configmap.yaml;"]
           imagePullPolicy: Always
           volumeMounts:
             - name: nfd-source
@@ -64,7 +64,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-          image: {{ ssp_registry | default('quay.io/ksimon') }}/{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
+          image: {{ ssp_registry | default('quay.io/kubevirt') }}/{{ kubevirt_node_labeller_image }}:{{ kubevirt_node_labeller_tag }}
           securityContext:
             privileged: true
           resources:
@@ -81,4 +81,4 @@ spec:
           emptyDir: {}
         - name: cpu-config
           configMap:
-            name: kubevirt-cpu-plugin-configmap
+            name: cpu-plugin-configmap
