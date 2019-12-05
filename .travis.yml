@@ -15,7 +15,7 @@ jobs:
   include:
   - stage: Tests
     name: "minishift"
-    env: CPLATFORM=minishift TARGET=functests KUBECTL=oc OC=oc V=5 CI_CONFIG_FEATURE_GATES=DataVolumes,LiveMigration,CPUManager
+    script: make release "IMAGE_TAG=test"
 
   - stage: Build and Deploy
     name: Build and Deploy to GitHub
@@ -40,6 +40,7 @@ addons:
   apt:
     packages:
     - python3-pip
+    - python3-setuptools
 
 cache:
   directories:
@@ -61,5 +62,3 @@ before_script:
 - bash -x hack/build-operator.sh
 - bash -x hack/install-operator.sh
 
-script:
-- bash -x test.sh
