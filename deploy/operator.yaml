@@ -22,7 +22,7 @@ spec:
         type: Recreate
       containers:
         - name: kubevirt-ssp-operator
-          image: REPLACE_IMAGE
+          image: quay.io/ksimon/kubevirt-ssp-operator-container
           ports:
           - containerPort: 60000
             name: metrics

@@ -1,13 +1,13 @@
 # Always keep the future version here, so we won't overwrite latest released manifests
 
 OPERATOR_SDK_VERSION ?= v0.8.0
-IMAGE_REGISTRY ?= quay.io/fromani
+IMAGE_REGISTRY ?= quay.io/ksimon
 IMAGE_TAG ?= latest
 OPERATOR_IMAGE ?= kubevirt-ssp-operator-container
 REGISTRY_IMAGE ?= kubevirt-ssp-operator-registry
 
 container-build: csv-generator container-build-operator container-build-registry
-
+push: container-build-operator container-push-operator
 container-build-operator:
 	docker build -f build/Dockerfile -t $(IMAGE_REGISTRY)/$(OPERATOR_IMAGE):$(IMAGE_TAG) .
 
@@ -33,6 +33,7 @@ operator-sdk:
 	chmod 0755 operator-sdk
 
 operator-courier:
+	pip3 install wheel
 	pip3 install --user operator-courier
 
 manifests-prepare:
@@ -50,4 +51,4 @@ release: manifests container-build container-release
 functests:
 	cd functests && ./test-runner.sh
 
-.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release
+.PHONY: functests release manifests manifests-prepare manifests-cleanup container-push container-build container-release push
